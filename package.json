@@ -1,0 +1,21 @@
+{
+  "name": "juki",
+  "version": "1.0.0",
+  "description": "this a nocode tool to help build nextjs apps(proof of concept)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "",
+    "build": "",
+    "dev-engine": "cd .juki/engine & air",
+    "dev-editor": "cd .juki/editor && pnpm dev --port 8889",
+    "dev-app": "cd my-app && pnpm dev",
+    "dev": "concurrently \"pnpm  dev-engine\" \"pnpm  dev-editor\" \"pnpm  dev-app\""
+  },
+  "keywords": ["react", "nextjs", "nocode", "golang"],
+  "author": "Paa-Kofi Aidoo",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
