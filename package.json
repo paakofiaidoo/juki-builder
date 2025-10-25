@@ -10,7 +10,8 @@
     "dev-engine": "cd .juki/engine & air",
     "dev-editor": "cd .juki/editor && pnpm dev --port 8889",
     "dev-app": "cd my-app && pnpm dev",
-    "dev": "concurrently \"pnpm  dev-engine\" \"pnpm  dev-editor\" \"pnpm  dev-app\""
+    "dev": "concurrently \"pnpm  dev-engine\" \"pnpm  dev-editor\" \"pnpm  dev-app\"",
+    "postinstall": "cd .juki/editor && pnpm install"
   },
   "keywords": ["react", "nextjs", "nocode", "golang"],
   "author": "Paa-Kofi Aidoo",
