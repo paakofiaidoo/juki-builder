@@ -1,5 +1,0 @@
-{
-  "name": "Juki Editor - Visual Builder",
-  "description": "A Figma-style visual editor for building React application UIs by composing pages, components, and elements. This version focuses on the editor's frontend structure and basic interactions without backend integration.",
-  "requestFramePermissions": []
-}
