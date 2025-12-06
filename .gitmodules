@@ -1,0 +1,9 @@
+[submodule ".juki/editor"]
+	path = .juki/editor
+	url = https://github.com/paakofiaidoo/juki-editor.git
+[submodule ".juki/engine"]
+	path = .juki/engine
+	url = https://github.com/paakofiaidoo/juki-engine.git
+[submodule ".juki/protos"]
+	path = .juki/protos
+	url = https://github.com/paakofiaidoo/juki-protos.git

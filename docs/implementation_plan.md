@@ -27,7 +27,8 @@ Build "The WordPress for the AI Internet" - a local-first, AI-powered, visual ed
 - [ ] **Visual Canvas**: Implement `iframe` based renderer for the user's app.
 - [ ] **Selection Engine**: Logic to map DOM elements back to AST nodes (Source Maps?).
 - [ ] **Terminal Console**: UI component to display streamed logs from the Engine.
-- [ ] **State Panel**: UI to add/remove `useState` hooks.
+- [ ] **State Menu**: Central dashboard to view Local, Global, and API state variables.
+- [ ] **Type Manager**: Tree view UI to define/edit TypeScript interfaces with type dropdowns.
 - [ ] **Effects Panel**: UI to add `useEffect` hooks with dependency selector and code editor.
 - [ ] **Props Panel**: UI to bind parent variables to child props.
 - [ ] **Data Loader UI**: Visual block for adding `async` data fetching to Server Components.
