@@ -7,7 +7,7 @@
     "start": "",
     "build": "",
     "dev:engine": "cd .juki/engine && go tool air",
-    "dev:editor": "cd .juki/editor && pnpm dev --port 8889",
+    "dev:editor": "cd .juki/editor && pnpm dev --port 4221",
     "dev": "concurrently \"pnpm  dev:engine\" \"pnpm  dev:editor\"",
     "gen:protos": "./scripts/gen-protos.sh",
     "postinstall": "cd .juki/editor && pnpm install"
