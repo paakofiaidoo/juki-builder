@@ -59,13 +59,19 @@ Juki employs a **Hybrid Architecture** to balance performance (Go) with ecosyste
 *   **Location:** `.juki/engine`
 
 ### 4.2 The Hybrid Bridge (Go <-> Node)
-*   **Role:** The translator.
-*   **Mechanism:** The Go Engine spawns a persistent Node.js worker process. They communicate via **JSON-RPC** over `stdin`/`stdout`.
-*   **Why?** Go is great for systems, but JavaScript/TypeScript tools (like `ts-morph`, `prettier`) are best for manipulating JS/TS code.
+*   **Role:** The Deterministic Parser.
+*   **Mechanism:** The Go Engine spawns a persistent Node.js worker process.
+*   **Why?** Reliability. We use `ts-morph` and standard parsers for AST transformations to ensure 100% correctness for read/write operations.
 *   **Capabilities:**
     *   **AST Transformations:** Safely parsing and modifying source code.
     *   **Plugin Execution:** Running NPM-based plugins.
-    *   **Project Scaffolding:** Running `create-next-app`.
+
+### 4.3 The AI Layer (Gemini)
+*   **Role:** The Creative Engine & Debugger.
+*   **Usage:**
+    *   **Scaffolding:** Generating initial project structure or new components from text descriptions.
+    *   **Debugging:** Analyzing error logs from the Terminal and suggesting fixes.
+    *   **Constraint:** AI generated code is validated by the Engine to ensure it fits the Next.js `app` router structure.
 
 ### 4.3 The Editor UI (Next.js)
 *   **Role:** The user interface.
@@ -152,7 +158,7 @@ buf generate
 **A:** Go provides low-latency system operations (File Watcher, Git, DB, HTTP Server). However, manipulating JavaScript/TypeScript ASTs (Abstract Syntax Trees) is best done in JavaScript tools like `ts-morph` or `babel`. Juki uses a persistent Node.js worker managed by Go to handle these code transformations safely.
 
 ### Q: How do we handle complex dependencies?
-**A:** We learned that mixing package managers leads to "ghost dependency" issues. Juki enforces `pnpm` for its internal monorepo to ensure distinct node_module structures.
+**A:** We enforce **Strict PNPM** (v9+). This simplifies the backend (no need to guess between npm/yarn/bun) and ensures deterministic installs with efficient disk usage. Future versions may support dynamic managers, but for now, stability is priority.
 
 ### Q: What about Protobuf versioning?
 **A:** We strictly pin `@bufbuild/protobuf` to v1.10.1 to match `@connectrpc/connect` v1.x requirements, avoiding runtime incompatibilities with modern Protobuf v2 generators (for now).

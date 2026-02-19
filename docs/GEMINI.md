@@ -2,9 +2,9 @@
 
 ## 1. Project Goal
 
-Juki Editor is a web-based, WYSIWYG visual editor for creating user interfaces with React. It provides a Figma-like experience where users can drag, drop, and style elements and components on a canvas. The primary output is not just a visual representation but also production-quality React/JSX code and a portable JSON-based project state.
+Juki Editor is a web-based, WYSIWYG visual editor for creating user interfaces with React for nextjs apps. It provides a Figma-like experience where users can drag, drop, and style elements and components on a canvas. The primary output is not just a visual representation but also production-quality React/JSX code and a portable JSON-based project state.
 
-The application is designed to be entirely client-side, using `localStorage` for project persistence and integrating with the Gemini API for advanced features like component generation from text and JSX parsing.
+The application is designed to be entirely client-side, using the local `Engine` (SQLite/FileSystem) for project persistence and integrating with the Gemini API for advanced features like component generation from text and JSX parsing.
 
 ---
 
@@ -87,7 +87,7 @@ A single, monolithic React Context is used to manage the entire application stat
 -   **State:** It holds `projects`, `activeProject`, `activePageId`, `selectedItemId`, `editingComponentId`, etc.
 -   **Actions:** It exposes all state mutation functions (`addItem`, `moveItem`, `updateItemProps`, `runCodePilot`, etc.).
 -   **Immutability:** State updates are performed immutably by creating deep copies (`JSON.parse(JSON.stringify(prev))`) of the project state before applying modifications.
--   **Persistence:** `useEffect` hooks are used to write the `projects` list and `activeProject` ID to `localStorage` whenever they change, ensuring state is preserved across sessions.
+-   **Persistence:** `useEffect` hooks are used to sync state changes to the Juki Engine (backend), ensuring state is preserved across sessions via the local database.
 -   **Derived State:** `useMemo` is used to efficiently compute derived state like `activePage`, `selectedItem`, and `editingComponent` only when their dependencies change.
 
 ### 3.2. Rendering Pipeline

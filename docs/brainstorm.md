@@ -17,6 +17,17 @@
 -   **The Engine**: The brain. Handles CLI actions, project creation, git operations, and "linking" the editor to the target Next.js project.
 -   **Target Project**: A standard Next.js application created in the root (or imported).
 
+## Brainstorm Mode Protocol
+*When entering "Brainstorm Mode", we follow this strict structure to evaluate ideas brutally and objectively:*
+
+1.  **The Idea/Question**: Capture the user's raw input or feature request.
+2.  **The Concept**: Define *what* we are building and *why*.
+3.  **Expert Challenge (The "Brutal Truth")**:
+    *   I (the Engineer) must ask objective, hard questions to stress-test the idea.
+    *   Examples: "Is this secure?", "Will it scale?", "Is it a distraction?"
+4.  **Nuances & Risks**: Identify edge cases, hidden technical debt, or safety concerns.
+5.  **The Verdict**: Explicitly state if we Proceed, Pivot, or Kill the idea.
+
 ## Journal of Ideas & Decisions
 
 ### 1. Project Scope & Architecture
@@ -339,5 +350,69 @@ juki-builder/ (Orchestrator Repo)
 *   You push.
 *   You go to `juki-cloud` (Private) and update the `go.mod` to point to the new `juki-builder` version.
 *   You deploy `juki-cloud`.
+
+
+
+### 19. Isolated Terminal & Activity Logger
+*   **Problem**: Users need visibility into the running process (e.g., `npm run dev` logs) and a way to debug engine interactions.
+*   **Solution**:
+    *   **Isolated Terminal**: A real-time, streaming terminal interface (using PTY) that runs independently of the main thread.
+    *   **Activity Logger**: A system-wide interceptor that records all API actions and responses to the internal SQLite database for debugging.
+
+## 20. Architecture Refinement: Isolated Terminal & Activity Logger (Expert Review)
+
+### A. The "Isolated Terminal" Strategy
+*   **The Concept**: Instead of a simple "Run" button that fires a script in the background, we treat the project runner as a **First-Class Pseudo-Terminal (PTY)**.
+*   **Why?**:
+    *   **Colors**: `npm run dev` output is useless without ANSI colors.
+    *   **Interaction**: Users need to hit `q` to quit, or `r` to restart. A simple `exec.Command` cannot handle this.
+    *   **State**: The terminal session must persist even if the frontend refreshes.
+*   **The Implementation**:
+    *   **Backend**: Use `creack/pty` to spawn a bash/zsh session.
+    *   **Transport**: Bi-directional gRPC streaming. `StartTerminal` (Server->Client stream) and `SendCommand` (Client->Server RPC).
+    *   **Frontend**: Use `xterm.js` to render the raw byte stream.
+
+### B. The "Activity Logger" Strategy
+*   **The Concept**: A "Black Box Recorder" for the Engine.
+*   **Why?**: When the AI generates a component and it fails, the user (and the AI) needs to know *exactly* what mismatched. "It didn't work" is not enough.
+*   **The Implementation**:
+    *   **Middleware**: A ConnectRPC Interceptor wraps *every* handler.
+    *   **Storage**: SQLite. Table `activity_logs`.
+    *   **Fields**: Request Payload (JSON), Response Payload (JSON), Duration, Error, Timestamp.
+    *   **UI**: A real-time "Network Tab" specifically for the Engine.
+
+### C. Expert Engineering Questions (Challenge the Design)
+
+#### 1. Security & Isolation
+*   **Q**: *By exposing a PTY, are we giving the user a root shell?*
+    *   **A (Verdict)**: **Controlled Environment**. We are NOT giving a raw shell for arbitrary commands. The terminal is for running specific, controlled actions (Install Package, Run Dev, Build). The AI/User sees the output to debug specific context failures, similar to Antigravity's own context integration.
+
+#### 2. Performance Overhead
+*   **Q**: *Will logging every single keystroke or high-frequency poll to SQLite kill the disk IO?*
+    *   **A (Verdict)**: **Major Mutations Only**. We explicitly EXCLUDE file watcher events and read-only actions. We ONLY log significant lifecycle events: `git push`, `create_component`, `delete_project`, `install_plugin`.
+
+#### 3. Concurrency
+*   **Q**: *What happens if 5 browser tabs open 5 terminal streams for the same project?*
+    *   **A (Verdict)**: **Single-Threaded Model**. We run only one project at a time. Starting a "Build" implicitly shuts down the "Dev Server". We will track this state in a new `terminal_activities` DB table.
+
+### D. The Verdict
+
+### 21. Package Manager Strategy: Strict vs. Dynamic
+
+#### The Question
+*   **User**: "Should we strictly use `pnpm`, or allow dynamic managers (npm/yarn/bun) per project but default to pnpm?"
+
+#### The Analysis
+*   **Option A: Strict PNPM (Verdict)**
+    *   *Pros*: Zero config, deterministic caching, simplicity in backend implementation (hardcoded `pnpm run`).
+    *   *Cons*: Friction for imports.
+    *   *Decision*: For MVP, we prioritize stability and simplicity. We will revisit dynamic managers in Phase 2.
+*   **Option B: Dynamic but Opinionated**
+    *   *Pros*: Respects the user's existing workflow.
+    *   *Cons*: Complexity overhead.
+
+#### Proposed Implementation
+1.  **Commands**: Hardcoded to `pnpm` in `enums/commands.go`.
+2.  **Future**: Add `package_manager` column to `projects` table later.
 
 

@@ -3,30 +3,33 @@
 ## Goal
 Build "The WordPress for the AI Internet" - a local-first, AI-powered, visual editor for Next.js applications.
 
-## Phase 1: The Engine Core (Go)
+## Phase 1: The Engine Core (Go) - ✅ Complete
 **Objective**: Build the "Brain" that runs locally.
-- [ ] **Scaffold Go Project**: Setup standard Go project structure (`cmd`, `pkg`, `internal`).
-- [ ] **Implement Connect Server**: Setup HTTP/2 server with Connect-Go.
-- [ ] **Git Service**: Implement `Clone`, `Pull`, `Push`, `Commit` methods.
-- [ ] **Branch Manager**: Implement logic to create `juki-session-*` branches and handle merging/squashing.
-- [ ] **SQLite Integration**: Setup local SQLite DB and schema for project indexing.
-- [ ] **File Watcher**: Implement `fsnotify` with **Debounce Logic** to handle rapid disk changes.
-- [ ] **Package Manager Detector**: Logic to identify `npm`, `pnpm`, `yarn`, or `bun`.
+- [x] **Scaffold Go Project**: Setup standard Go project structure (`cmd`, `pkg`, `internal`).
+- [x] **Implement Connect Server**: Setup HTTP/2 server with Connect-Go.
+- [x] **Git Service**: Implement `Clone`, `Pull`, `Push`, `Commit` methods.
+- [x] **Branch Manager**: Implement logic to create `juki-session-*` branches and handle merging/squashing.
+- [x] **SQLite Integration**: Setup local SQLite DB and schema for project indexing.
+- [x] **File Watcher**: Implement `fsnotify` with **Debounce Logic** to handle rapid disk changes.
+- [x] **Strict PNPM Enforcer**: Hardcoded `pnpm` logic for reliability (Dynamic managers postponed).
+- [x] **Terminal Service**: Safe PTY Runner (Strict PNPM commands) with DB tracking.
+- [x] **Activity Logger**: Filtered Activity Logger for mutation auditing.
 
-## Phase 2: The Hybrid Bridge (Go <-> Node)
+## Phase 2: The Hybrid Bridge (Go <-> Node) - ✅ Complete
 **Objective**: Enable safe AST transformations with robust error handling.
-- [ ] **Persistent Node Worker**: Implement a Go service that spawns a *long-running* Node process and communicates via JSON-RPC (stdin/stdout).
-- [ ] **Worker Health Check**: Logic to restart the Node worker if it crashes.
-- [ ] **TS-Morph Wrapper**: Node script that handles `ts-morph` operations and catches parsing errors gracefully.
-- [ ] **Error Recovery**: If AST parsing fails, return a specific error code so the UI can switch to "Code Mode".
+- [x] **Persistent Node Worker**: Go service that spawns a *long-running* Node process via JSON-RPC.
+- [x] **Worker Health Check**: Logic to restart the Node worker if it crashes.
+- [x] **Gemini Integration**: Using AI for "Creative" parsing and debugging suggestions.
+- [x] **Error Recovery**: If AST parsing fails, return a specific error code.
 
-## Phase 3: The Editor UI (React)
+## Phase 3: The Editor UI (React) - 🚧 In Progress
 **Objective**: The Visual Interface.
 - [ ] **Connect Client**: Generate TypeScript client from Protobufs.
 - [ ] **Project Dashboard**: UI to list local projects and "Import from URL".
 - [ ] **Visual Canvas**: Implement `iframe` based renderer for the user's app.
 - [ ] **Selection Engine**: Logic to map DOM elements back to AST nodes (Source Maps?).
-- [ ] **Terminal Console**: UI component to display streamed logs from the Engine.
+- [ ] **Terminal Console (New)**: VS Code-style bottom panel with `xterm.js` stream.
+- [ ] **Activity Viewer (New)**: List view of API mutations (Activity Logs).
 - [ ] **State Menu**: Central dashboard to view Local, Global, and API state variables.
 - [ ] **Type Manager**: Tree view UI to define/edit TypeScript interfaces with type dropdowns.
 - [ ] **Effects Panel**: UI to add `useEffect` hooks with dependency selector and code editor.
